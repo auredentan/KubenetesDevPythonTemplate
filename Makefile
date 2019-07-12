@@ -15,6 +15,8 @@ dev-front:
 
 .PHONY: dev-full
 dev-full:
+	make dev;
+	make dev-front;
 	bash echo `minikube ip`;
 
 .PHONY: dev-flower
