@@ -1,0 +1,43 @@
+apiVersion: skaffold/v1beta11
+kind: Config
+build:
+  artifacts:
+  - image: server
+    context: app/server
+  local:
+    push: false
+  tagPolicy:
+    gitCommit: {}
+
+deploy:
+  kubectl:
+    manifests:
+    - ./k8s/**.yaml
+
+profiles:
+
+  - name: local
+    activation:
+      - kubeContext: minikube
+    build:
+      artifacts:
+      - image: server
+        context: app
+        docker:
+          dockerfile: server/Dockerfile
+        sync:
+          manual:
+            - src: 'frontend/**/*'
+              dest: /app/frontend/
+              strip: 'frontend/'
+            - src: 'server/**/*.py'
+              dest: /app/server
+              strip: 'server/'
+      local:
+        push: false
+    deploy:
+      kubectl:
+        manifests:
+        - ./k8s/**.yaml
+        - ./k8s/local/**.yaml
+

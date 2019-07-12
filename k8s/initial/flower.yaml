@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-app
+spec:
+  ports:
+  - port: 5555
+  type: LoadBalancer
+  selector:
+    app: flower-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flower-app
+spec:
+  selector:
+    matchLabels:
+      app: flower-app
+  template:
+    metadata:
+      labels:
+        app: flower-app
+    spec:
+      containers:
+      - name: flower-app
+        image: mher/flower
+        command: ["flower", "--broker=amqp://guest:guest@rabbitmq:5672//"]
+        ports:
+        - containerPort: 5555
+
