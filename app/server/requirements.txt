@@ -1,4 +1,4 @@
 flask==1.0.2
 gunicorn==19.9.0
-celery==4.3.0
+celery==5.2.2
 flower==0.9.3
